@@ -4,6 +4,7 @@ import { Notifications } from 'expo';
 import * as firebase from 'firebase';
 import GreateCreateUser from "./GreateCreateUser";
 import { firebaseInitialize, registerForPushNotificationsAsync } from "./firebaseUtils";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 firebaseInitialize();
 
@@ -14,6 +15,7 @@ export default class App extends React.Component {
     email: '',
     password: '',
     errorMessage: '',
+    spinner: false,
   };
 
   componentDidMount() {
@@ -62,6 +64,7 @@ export default class App extends React.Component {
   }
 
   authAndPostNotification = async () => {
+    this.setState({ spinner: true });
     let errorMessage = '';
     let isRegistered = false;
     try {
@@ -76,9 +79,10 @@ export default class App extends React.Component {
     } catch ({ message }) {
       errorMessage = message;
     }
-    this.setState({
+    await this.setState({
       errorMessage,
       isRegistered,
+      spinner: false
     })
   };
 
@@ -95,6 +99,13 @@ export default class App extends React.Component {
             style={styles.imageStyle}
           />
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
+          <View style={styles.container}>
+            <Spinner
+              visible={this.state.spinner}
+              textContent={'Loading...'}
+              textStyle={styles.spinnerTextStyle}
+            />
+          </View>
         </View>
         <TextInput
           style={styles.inputStyle}
@@ -141,5 +152,15 @@ const styles = {
   buttonStyle: {
     width: 150,
     borderRadius: 15,
-  }
+  },
+
+  spinnerTextStyle: {
+    color: '#FFF'
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF'
+  },
 };

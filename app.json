@@ -19,6 +19,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
+    "notification": {
+      "icon": "https://shu.com.ua/data/avatars/m/34/34076.jpg?1565882350"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
